@@ -1,0 +1,33 @@
+$main-blue: #d5dee9;
+$main-blue--dark: rgba(#d5dee9, 0.88);
+$input-border--radius: 3px;
+$input-padding: 0.2rem 0.35rem;
+$input-background: #edeef2;
+
+.input_error {
+	border: 1px solid red;
+}
+
+.input_field {
+	padding: 1rem 0;
+}
+
+.input_field__container {
+	display: flex;
+	flex-direction: column;
+	padding-bottom: 1rem;
+}
+
+input {
+	width: 100%;
+	outline: none;
+	border: 1px solid #8e9e9f;
+	border-radius: $input-border--radius;
+	background: $input-background;
+	padding: $input-padding;
+}
+input:focus {
+	background: $main-blue;
+	transition-duration: 0.3s;
+	transition-delay: 0.1s;
+}

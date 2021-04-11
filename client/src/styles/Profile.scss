@@ -1,0 +1,12 @@
+@import 'App';
+
+.profile_header {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	border-bottom: 1px solid $main-theme--dark;
+}
+
+.profile_form__container {
+	margin: auto;
+}
