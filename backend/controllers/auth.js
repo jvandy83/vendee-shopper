@@ -1,5 +1,8 @@
 import User from '../models/User.js';
-import jwt from 'jsonwebtoken';
+
+import { createRefreshToken, createAccessToken } from '../utils/auth.js';
+
+import { __prod__ } from '../constants.js';
 
 import argon2 from 'argon2';
 
@@ -14,17 +17,15 @@ export const register = async (req, res, next) => {
 		}
 		const hash = await argon2.hash(password);
 		const user = new User({ email, password: hash, fullName });
-		await user.save();
-		const cookie = jwt.sign(
-			{
-				user: user._id,
-			},
-			'secret',
-		);
-		res.cookie('qid', cookie);
+		// await user.save();
+
+		// createRefreshToken returns
+		// a cookie so it accepts response param
+		createRefreshToken(res, user);
+
 		return res.status(200).json({
-			message: 'A new user has been added',
-			user,
+			// createAccessToken returns plain jsonwebtoken
+			token: createAccessToken(user),
 		});
 	} catch (err) {
 		console.error(err);
@@ -55,16 +56,24 @@ export const signin = async (req, res, next) => {
 	}
 };
 
-export const me = async (req, res, next) => {
-	const id = req.query.id;
-	const user = User.findById(id).exec();
+export const me = (req, res, next) => {
+	console.log((req.user && req.user) || 'User is not set on req object');
+
+	const user = User.findById(req.user).exec();
 	if (!user) {
-		return res.status(400).json({
+		return res.status(403).json({
 			message: 'User does not exist with that id',
 		});
 	}
 	return res.status(200).json({
 		message: 'Success',
 		user,
+	});
+};
+
+export const fetchRefreshToken = (req, res, next) => {
+	console.log(req.headers);
+	return res.json({
+		message: 'Success',
 	});
 };

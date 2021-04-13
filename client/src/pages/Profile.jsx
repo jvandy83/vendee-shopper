@@ -12,11 +12,15 @@ import data from '../components/inputs/selectData.js';
 
 import { isEmpty } from '../util.js';
 
+import { useToken } from '../hooks/useToken.js';
+
 import axios from 'axios';
 
 import '../styles/Profile.scss';
 
 export default (props) => {
+	const { getAccessToken } = useToken();
+
 	const log = (vals) => console.log(vals);
 	const checkErrors = (vals) => {
 		const errors = {};
@@ -46,19 +50,10 @@ export default (props) => {
 		));
 	};
 
-	useEffect(() => {
-		console.log(props && props.appUser);
-	});
-
-	const renderGreeting = () => {
-		const user = props && props.appUser;
-		return user.fullName;
-	};
-
 	return (
 		<div className='profile_root'>
 			<div className='profile_header'>
-				<h1>Hello, {renderGreeting()}</h1>
+				<h1>Hello</h1>
 				<h2 className='profile_header__title'>Build Your Custom Profile </h2>
 			</div>
 			<div className='profile_form__container'>

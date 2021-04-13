@@ -5,12 +5,15 @@ import FormInput from '../components/inputs/FormInput.jsx';
 import Button from '../components/Button.jsx';
 
 import useForm from '../hooks/useForm.js';
+import { useAuth } from '../context/authContext.js';
 
 import { isEmpty } from '../util.js';
 
 import '../styles/Register.scss';
 
 export default (props) => {
+	const { register } = useAuth();
+
 	const checkErrors = (vals) => {
 		const errors = {};
 		const { email, password } = vals;
@@ -24,7 +27,7 @@ export default (props) => {
 	};
 
 	const { handleChange, handleSubmit, errors, values } = useForm(
-		props.handleRegister,
+		register,
 		checkErrors,
 	);
 
@@ -41,9 +44,10 @@ export default (props) => {
 		);
 	};
 
-	if (props.isRegistered) {
-		return <Redirect to='/profile' />;
-	}
+	// if (props.isRegistered) {
+	// 	return <Redirect to='/profile' />;
+	// }
+
 	return (
 		<div className='register_root'>
 			<div className='register_title'>

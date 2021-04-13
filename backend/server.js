@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import 'dotenv/config.js';
 
 import express from 'express';
 
@@ -12,12 +12,8 @@ import authRoutes from './routes/auth.js';
 import connectLivereload from 'connect-livereload';
 import livereload from 'livereload';
 
-import cookieParser from 'cookie-parser';
-
 // current work around for using __dirnmae with esImports
 const __dirname = dirname(fileURLToPath(import.meta.url));
-
-dotenv.config();
 
 const app = express();
 
@@ -28,20 +24,15 @@ app.use(express.json());
 
 app.use((_, res, next) => {
 	res.setHeader('Access-Control-Allow-Credentials', true);
-	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5000');
+	res.setHeader('Access-Control-Allow-Origin', '*');
+	// res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5000');
 	res.setHeader(
 		'Access-Control-Allow-Methods',
-		'GET, POST, PUT, PATCH, DELETE',
+		'GET, POST, PUT, PATCH, DELETE, OPTIONS',
 	);
 	res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 	next();
 });
-
-// app.use(
-// 	cookieParser({
-// 		secret: 'secret',
-// 	}),
-// );
 
 // set up hot reload in the
 // browser for development
@@ -62,6 +53,7 @@ app.use('/v1/api/auth', authRoutes);
 const MONGO_OPTIONS = {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
+	useCreateIndex: true,
 };
 
 const main = async () => {
