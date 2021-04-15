@@ -12,6 +12,8 @@ import authRoutes from './routes/auth.js';
 import connectLivereload from 'connect-livereload';
 import livereload from 'livereload';
 
+import cookieParser from 'cookie-parser';
+
 // current work around for using __dirnmae with esImports
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -21,6 +23,7 @@ app.use(express.static(path.resolve(__dirname, '../', 'client', 'dist')));
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(cookieParser());
 
 app.use((_, res, next) => {
 	res.setHeader('Access-Control-Allow-Credentials', true);
@@ -54,6 +57,7 @@ const MONGO_OPTIONS = {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 	useCreateIndex: true,
+	useFindAndModify: false,
 };
 
 const main = async () => {

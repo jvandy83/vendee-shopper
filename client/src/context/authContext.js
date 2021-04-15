@@ -26,6 +26,7 @@ const AuthProvider = (props) => {
 				})
 				.then(async (res) => {
 					const { user } = await res.data;
+					setUser(user);
 					console.log(user);
 				});
 	}, [getAccessToken, isLoggedIn, loading]);
@@ -35,19 +36,13 @@ const AuthProvider = (props) => {
 		try {
 			const res = await axios({
 				url: `http://localhost:5000/v1/api/auth/register`,
-				headers: {
-					Authorization: `Bearer ${getAccessToken()}`,
-				},
 				method: 'post',
 				data: { ...values },
-				withCredentials: true,
 			});
-			const { token } = await res.data;
 			if (res.status !== 200 && res.status !== 201) {
 				console.log('Unable to register user');
 			} else {
 				setLoggedIn(true);
-				setAccessToken(token);
 				setLoading(false);
 			}
 		} catch (err) {
@@ -59,7 +54,7 @@ const AuthProvider = (props) => {
 		setLoading(true);
 		try {
 			const res = await axios({
-				url: `http://localhost:5000/v1/api/auth/register`,
+				url: `http://localhost:5000/v1/api/auth/login`,
 				headers: {
 					Authorization: `Bearer ${getAccessToken()}`,
 				},
@@ -67,7 +62,7 @@ const AuthProvider = (props) => {
 				data: { ...values },
 				withCredentials: true,
 			});
-			const { user, token } = await res.data;
+			const { token } = await res.data;
 			if (res.status !== 200 && res.status !== 201) {
 				console.log('Unable to register user');
 			} else {

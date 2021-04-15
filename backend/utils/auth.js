@@ -1,26 +1,26 @@
 import jwt from 'jsonwebtoken';
-const { sign } = jwt;
+const { sign, verify } = jwt;
 
 export const createAccessToken = (user) => {
+	return sign({ user: user._id }, process.env.ACCESS_TOKEN_SECRET, {
+		expiresIn: '15m',
+	});
+};
+
+export const createRefreshToken = (user) => {
 	return sign(
+		{ user: user._id, tokenVersion: user.tokenVersion },
+		process.env.REFRESH_TOKEN_SECRET,
 		{
-			user: user._id,
-		},
-		process.env.ACCESS_TOKEN_SECRET,
-		{
-			expiresIn: '15m',
+			expiresIn: '7d',
 		},
 	);
 };
 
-export const createRefreshToken = (res, user) => {
-	return res.cookie(
-		'qid',
-		sign({ user: user._id }, process.env.REFRESH_TOKEN_SECRET, {
-			expiresIn: '7d',
-		}),
-		{
-			httpOnly: true,
-		},
-	);
+export const verifyToken = (token) => {
+	return verify(token, process.env.REFRESH_TOKEN_SECRET);
+};
+
+export const sendRefreshToken = (res, token) => {
+	res.cookie('qid', token, { httpOnly: true });
 };

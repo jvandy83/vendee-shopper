@@ -16,7 +16,6 @@ const userSchema = new Schema({
 		type: String,
 		required: true,
 		minlength: 6,
-		select: false,
 	},
 	fullName: {
 		type: String,
@@ -39,6 +38,10 @@ const userSchema = new Schema({
 		kosher: Boolean,
 		peanut: Boolean,
 		vegan: Boolean,
+	},
+	tokenVersion: {
+		type: Number,
+		default: 0,
 	},
 	resetPasswordToken: String,
 	resetPasswordDate: {
