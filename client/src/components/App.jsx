@@ -10,6 +10,10 @@ import { Route, Switch } from 'react-router-dom';
 import '../styles/App.scss';
 
 export default (props) => {
+	// if (loading) {
+	// 	return <div>Loading...</div>;
+	// }
+
 	return (
 		<div className='app_root'>
 			<Navbar />

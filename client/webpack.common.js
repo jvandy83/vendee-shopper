@@ -15,7 +15,7 @@ export default {
 		filename: '[name].bundle.js',
 	},
 	resolve: {
-		extensions: ['.js', '.jsx', '.css', '.sass'],
+		extensions: ['.js', '.jsx', '.css', '.scss'],
 	},
 	optimization: {
 		minimize: true,

@@ -5,7 +5,8 @@ import FormInput from '../components/inputs/FormInput.jsx';
 import Button from '../components/Button.jsx';
 
 import useForm from '../hooks/useForm.js';
-import { useAuth } from '../context/authContext.js';
+
+import { useAuth } from '../context/authContext';
 
 import { isEmpty } from '../util.js';
 
@@ -13,7 +14,6 @@ import '../styles/Register.scss';
 
 export default (props) => {
 	const { register } = useAuth();
-
 	const checkErrors = (vals) => {
 		const errors = {};
 		const { email, password } = vals;

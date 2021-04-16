@@ -35,14 +35,15 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
 	const { email, password } = req.body;
+	console.log(email, password);
 	try {
-		const user = await User.findOne({ email });
+		const user = await User.findOne({ email }).exec();
 		if (!user) {
 			return res.status(400).json({
 				message: 'Email or password is incorrect',
 			});
 		}
-		console.log('user inside signin controller', user);
+
 		const decoded = await argon2.verify(user.password, password);
 		if (!decoded) {
 			return res.status(400).json({
@@ -56,6 +57,7 @@ export const login = async (req, res, next) => {
 		return res.status(200).json({
 			// createAccessToken returns plain jsonwebtoken
 			token: createAccessToken(user),
+			user,
 		});
 	} catch (err) {
 		console.error(err);
@@ -84,6 +86,7 @@ export const fetchRefreshToken = async (req, res, next) => {
 		return res.status(403).json({
 			ok: false,
 			accessToken: '',
+			message: 'not authorized',
 		});
 	}
 
@@ -98,15 +101,17 @@ export const fetchRefreshToken = async (req, res, next) => {
 		res.json({
 			error: err,
 			accessToken: '',
+			message: 'not authorized',
 		});
 	}
 
 	const user = await User.findById(payload.user);
 
 	if (!user) {
-		res.status(403).json({
+		res.status(401).json({
 			message: 'User not found',
 			accessToken: '',
+			message: 'no user found',
 		});
 	}
 
@@ -114,6 +119,7 @@ export const fetchRefreshToken = async (req, res, next) => {
 		return res.status(403).json({
 			ok: false,
 			accessToken: '',
+			message: 'bad token',
 		});
 	}
 
@@ -122,6 +128,7 @@ export const fetchRefreshToken = async (req, res, next) => {
 	return res.status(200).json({
 		message: 'Success',
 		token: createAccessToken(user),
+		user,
 	});
 };
 

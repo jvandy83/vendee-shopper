@@ -5,22 +5,14 @@ import 'regenerator-runtime/runtime.js';
 
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import { AuthProvider } from './context/authContext.js';
+import { AuthProvider } from './context/authContext';
 
-import App from './components/App.jsx';
-
-import axios from 'axios';
-
-const Main = () => {
-	const [isRegistered, setRegister] = useState(false);
-
-	return <App isRegistered={isRegistered} setRegister={setRegister} />;
-};
+import App from './components/App';
 
 ReactDOM.render(
 	<AuthProvider>
 		<Router>
-			<Main />
+			<App />
 		</Router>
 	</AuthProvider>,
 	document.querySelector('#root'),

@@ -1,104 +1,114 @@
-import React, { useContext, useEffect, useState } from 'react';
-
-import { useToken } from '../hooks/useToken.js';
-
-const AuthContext = React.createContext();
-
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 
-const AuthProvider = (props) => {
-	const { getAccessToken, setAccessToken } = useToken();
+import { BASE_URL } from './config';
 
-	const [isLoggedIn, setLoggedIn] = useState(false);
+import { useToken } from '../hooks/useToken';
 
-	const [user, setUser] = useState({});
+const AuthContext = createContext();
 
+const AuthProvider = ({ children }) => {
+	const { setAccessToken, getAccessToken } = useToken();
+
+	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
+	const [user, setUser] = useState({});
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 	useEffect(() => {
-		isLoggedIn &&
-			!loading &&
-			axios
-				.post(`http://localhost:5000/v1/api/auth/me`, null, {
-					headers: {
-						Authorization: `Bearer ${getAccessToken()}`,
-					},
-				})
-				.then(async (res) => {
-					const { user } = await res.data;
-					setUser(user);
-					console.log(user);
-				});
-	}, [getAccessToken, isLoggedIn, loading]);
+		setLoading(true);
+		axios({
+			url: `${BASE_URL}/refresh-token`,
+			method: 'post',
+		}).then((res) => {
+			if (res.status !== 200 && res.status !== 201) {
+				console.log('Unable to fetch user');
+				setError(res.data.message);
+			}
+			console.log('found user', res.data.user);
+			setUser(res.data.user);
+			setAccessToken(res.data.token);
+			setLoading(false);
+		});
+	}, [setUser, setError]);
 
 	const register = async (values) => {
-		setLoading(true);
 		try {
 			const res = await axios({
-				url: `http://localhost:5000/v1/api/auth/register`,
+				url: `${BASE_URL}/register`,
 				method: 'post',
-				data: { ...values },
+				data: values,
 			});
 			if (res.status !== 200 && res.status !== 201) {
 				console.log('Unable to register user');
-			} else {
-				setLoggedIn(true);
-				setLoading(false);
 			}
 		} catch (err) {
 			console.error(err);
+			const { message } = res.data;
+			setError(message);
 		}
 	};
-
 	const login = async (values) => {
 		setLoading(true);
 		try {
 			const res = await axios({
-				url: `http://localhost:5000/v1/api/auth/login`,
-				headers: {
-					Authorization: `Bearer ${getAccessToken()}`,
-				},
+				url: `${BASE_URL}/login`,
 				method: 'post',
-				data: { ...values },
-				withCredentials: true,
+				data: values,
 			});
-			const { token } = await res.data;
 			if (res.status !== 200 && res.status !== 201) {
-				console.log('Unable to register user');
-			} else {
-				setLoggedIn(true);
-				setAccessToken(token);
-				setLoading(false);
+				console.log('Login was unsuccessful');
+				const { message } = res.data;
+				setError(message);
 			}
+			const { token } = res.data;
+			setLoading(false);
+			setAccessToken(token);
+			setIsLoggedIn(true);
 		} catch (err) {
 			console.error(err);
 		}
 	};
-
-	const logout = () => {
-		// add some logic to logout
-		// like removing refresh or
-		// access token
+	// const getAuth = async () => {
+	// 	try {
+	// 		const res = await axios({
+	// 			url: `${BASE_URL}/me`,
+	// 			method: 'post',
+	// 			headers: {
+	// 				Authorization: `Bearer ${getAccessToken()}`,
+	// 			},
+	// 		});
+	// 		if (res.status !== 200 && res.status !== 201) {
+	// 			console.log('User is not authorized');
+	// 		}
+	// 	} catch (err) {
+	// 		console.error(err);
+	// 		const { message } = res.data;
+	// 		setError(message);
+	// 	}
+	// };
+	const fetchRefreshToken = async () => {
+		axios({
+			url: `${BASE_URL}/refresh-token`,
+			method: 'post',
+		});
 	};
-
-	if (loading) {
-		return <div>Loading</div>;
-	}
 
 	return (
 		<AuthContext.Provider
-			value={{ register, login, user, loading }}
-			{...props}
-		/>
+			value={{ login, register, user, loading, error, isLoggedIn }}
+		>
+			{children}
+		</AuthContext.Provider>
 	);
 };
 
-function useAuth() {
+const useAuth = () => {
 	const context = useContext(AuthContext);
 	if (context === undefined) {
-		throw new Error(`useAuth must be used within a AuthProvider`);
+		throw new Error(`useAuth must be used in AuthProvider`);
 	}
 	return context;
-}
+};
 
 export { AuthProvider, useAuth };

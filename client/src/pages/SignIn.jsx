@@ -2,17 +2,21 @@ import React from 'react';
 
 import { Redirect } from 'react-router-dom';
 
-import FormInput from '../components/inputs/FormInput.jsx';
+import FormInput from '../components/inputs/FormInput';
 
-import Button from '../components/Button.jsx';
+import Button from '../components/Button';
 
-import useForm from '../hooks/useForm.js';
+import useForm from '../hooks/useForm';
 
-import { isEmpty } from '../util.js';
+import { isEmpty } from '../util';
 
-import '../styles/SignIn.scss';
+import { useAuth } from '../context/authContext';
 
-export default (props) => {
+import '../styles/SignIn';
+
+export default () => {
+	const { login, isLoggedIn } = useAuth();
+
 	const checkErrors = (vals) => {
 		const errors = {};
 		const { email, password } = vals;
@@ -24,10 +28,12 @@ export default (props) => {
 		}
 		return errors;
 	};
+
 	const { handleChange, handleSubmit, errors, values } = useForm(
-		props.handleSignIn,
+		login,
 		checkErrors,
 	);
+
 	const renderErrors = () => {
 		if (isEmpty(errors)) {
 			return null;
@@ -41,9 +47,10 @@ export default (props) => {
 		);
 	};
 
-	if (props.isSignedIn) {
+	if (isLoggedIn) {
 		return <Redirect to='/profile' />;
 	}
+
 	return (
 		<div className='signin_root'>
 			<div className='signin_title'>

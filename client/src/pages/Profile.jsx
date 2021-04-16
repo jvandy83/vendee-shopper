@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import FormInput from '../components/inputs/FormInput.jsx';
 
@@ -12,20 +12,19 @@ import data from '../components/inputs/selectData.js';
 
 import { isEmpty } from '../util.js';
 
-import { useToken } from '../hooks/useToken.js';
-
-import axios from 'axios';
+import { useAuth } from '../context/authContext';
 
 import '../styles/Profile.scss';
+import '../styles/Spinner.scss';
 
-export default (props) => {
-	const { getAccessToken } = useToken();
+export default () => {
+	const { user, loading } = useAuth();
 
-	const log = (vals) => console.log(vals);
 	const checkErrors = (vals) => {
 		const errors = {};
 		return errors;
 	};
+	const log = (obj) => console.log(obj);
 	const { handleChange, handleSubmit, values, errors } = useForm(
 		log,
 		checkErrors,
@@ -50,10 +49,29 @@ export default (props) => {
 		));
 	};
 
+	if (loading) {
+		return (
+			<div class='lds-default'>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		);
+	}
+
 	return (
 		<div className='profile_root'>
 			<div className='profile_header'>
-				<h1>Hello</h1>
+				<h1>Hello, {user.fullName}</h1>
 				<h2 className='profile_header__title'>Build Your Custom Profile </h2>
 			</div>
 			<div className='profile_form__container'>
