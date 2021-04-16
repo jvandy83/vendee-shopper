@@ -10,9 +10,13 @@ $btn-font--color: #fff;
 	border: 1px solid $btn-primary;
 	border-radius: 0.25rem;
 	width: 30%;
-	padding: 0.2rem;
+	max-width: 7rem;
+	padding: 0.38rem 0;
 	font-weight: 700;
 	text-transform: capitalize;
+	margin: auto;
+	cursor: pointer;
+	box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 	.btn-primary:hover {
 		background: $btn-primary--hover;
 	}

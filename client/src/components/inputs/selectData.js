@@ -1,4 +1,5 @@
 export default [
+	'None',
 	'Siliac',
 	'Milk',
 	'Eggs',

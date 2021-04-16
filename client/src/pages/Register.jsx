@@ -1,16 +1,17 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
-import FormInput from '../components/inputs/FormInput.jsx';
+import FormInput from '../components/inputs/FormInput';
 
-import Button from '../components/Button.jsx';
+import Button from '../components/Button';
 
-import useForm from '../hooks/useForm.js';
+import Form from '../components/Form';
+
+import useForm from '../hooks/useForm';
 
 import { useAuth } from '../context/authContext';
 
-import { isEmpty } from '../util.js';
+import { isEmpty } from '../util';
 
-import '../styles/Register.scss';
+import '../styles/Register';
 
 export default (props) => {
 	const { register } = useAuth();
@@ -53,17 +54,29 @@ export default (props) => {
 			<div className='register_title'>
 				<h2>Register</h2>
 			</div>
-			<form onSubmit={handleSubmit}>
+			<Form onSubmit={handleSubmit}>
 				{renderErrors()}
-				<FormInput
-					type='fullName'
-					label='Full Name '
-					name='fullName'
-					id='fullName'
-					onChange={handleChange}
-					value={values.fullName || ''}
-					errors={errors}
-				/>
+				<label>Name</label>
+				<div className='name_input__container'>
+					<FormInput
+						type='firstName'
+						name='firstName'
+						id='firstName'
+						onChange={handleChange}
+						value={values.firstName || ''}
+						errors={errors}
+						prompt='First'
+					/>
+					<FormInput
+						type='lastName'
+						name='lastName'
+						id='lastName'
+						onChange={handleChange}
+						value={values.lastName || ''}
+						errors={errors}
+						prompt='Last'
+					/>
+				</div>
 				<FormInput
 					type='email'
 					label='Email '
@@ -82,8 +95,17 @@ export default (props) => {
 					value={values.password || ''}
 					errors={errors}
 				/>
+				<FormInput
+					type='confirmPassword'
+					label='Confirm Password'
+					name='confirmPassword'
+					id='confirmPassword'
+					onChange={handleChange}
+					value={values.confirmPassword || ''}
+					errors={errors}
+				/>
 				<Button control='primary' type='submit' value='submit' />
-			</form>
+			</Form>
 		</div>
 	);
 };

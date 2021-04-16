@@ -4,9 +4,44 @@
 	display: flex;
 	flex-direction: column;
 	text-align: center;
-	border-bottom: 1px solid $main-theme--dark;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 }
 
-.profile_form__container {
-	margin: auto;
+.profile_header__greeting {
+	margin-top: 4rem;
+	margin-bottom: 0.5rem;
+	font-family: 'Architects Daughter', cursive;
+}
+
+.profile_header__description {
+	margin-top: 0;
+}
+
+#dietaryRestrictions {
+	padding: 0.25rem 0;
+	background: #edeef2;
+	outline: none;
+	border-radius: 3px;
+}
+
+.name_input__container {
+	display: flex;
+	width: 100%;
+}
+
+#firstName {
+	display: inline-block;
+	margin-right: 1rem;
+}
+#lastName {
+	display: inline-block;
+}
+
+.divider {
+	margin-top: 1.5rem;
+}
+
+h3 {
+	display: inline-block;
+	// border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 }

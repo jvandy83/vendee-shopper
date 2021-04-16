@@ -8,14 +8,9 @@ $input-background: #edeef2;
 	border: 1px solid red;
 }
 
-.input_field {
-	padding: 1rem 0;
-}
-
 .input_field__container {
-	display: flex;
-	flex-direction: column;
-	padding-bottom: 1rem;
+	// padding-bottom: 1rem;
+	margin: 0 0.5rem 0 0;
 }
 
 input {
@@ -30,4 +25,11 @@ input:focus {
 	background: $main-blue;
 	transition-duration: 0.3s;
 	transition-delay: 0.1s;
+}
+
+.input_prompt {
+	color: rgba(0, 0, 0, 0.7);
+	font-family: 'Courier New', Courier, monospace;
+	font-size: 0.8rem;
+	margin-top: 1px;
 }

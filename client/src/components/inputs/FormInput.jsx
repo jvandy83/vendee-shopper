@@ -2,7 +2,17 @@ import React from 'react';
 
 import '../../styles/FormInput.scss';
 
-export default ({ type, label, name, id, onChange, value, errors }) => {
+export default ({
+	type,
+	label,
+	name,
+	id,
+	onChange,
+	value,
+	errors,
+	placeholder,
+	prompt,
+}) => {
 	const className = [
 		'input_field',
 		errors && Object.keys(errors).some((e) => e === name) ? 'input_error' : '',
@@ -18,7 +28,9 @@ export default ({ type, label, name, id, onChange, value, errors }) => {
 				id={id}
 				value={value || ''}
 				onChange={onChange}
+				placeholder={placeholder}
 			/>
+			<p className='input_prompt'>{prompt}</p>
 		</div>
 	);
 };

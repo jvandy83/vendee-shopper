@@ -6,6 +6,8 @@ import FormInput from '../components/inputs/FormInput';
 
 import Button from '../components/Button';
 
+import Form from '../components/Form';
+
 import useForm from '../hooks/useForm';
 
 import { isEmpty } from '../util';
@@ -56,7 +58,7 @@ export default () => {
 			<div className='signin_title'>
 				<h2>Welcome Back!</h2>
 			</div>
-			<form onSubmit={handleSubmit}>
+			<Form onSubmit={handleSubmit}>
 				{renderErrors()}
 				<FormInput
 					type='email'
@@ -77,7 +79,7 @@ export default () => {
 				<div className='button_container'>
 					<Button type='submit' value='submit' control='primary' />
 				</div>
-			</form>
+			</Form>
 		</div>
 	);
 };

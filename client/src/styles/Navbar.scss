@@ -1,21 +1,35 @@
-@mixin reset-list {
+@import './App';
+
+$nav-item--color: #fbfcfc;
+
+.nav_root {
+	display: flex;
+	justify-content: space-between;
+	font-family: 'PT Sans', sans-serif;
+	align-items: center;
+	height: 2.5rem;
+	width: 100%;
+	background: $main-theme--dark;
+	box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.3);
+}
+
+.nav_list {
+	display: flex;
 	margin: 0;
 	padding: 0;
 	list-style: none;
 }
 
-@mixin horizontal-list {
-	@include reset-list;
-
-	li {
-		display: inline-block;
-		margin: {
-			left: -2px;
-			right: 2em;
-		}
-	}
+.nav_list__item {
+	margin: 0 1rem;
 }
 
-nav ul {
-	@include horizontal-list;
+.nav_list__item-link {
+	color: $nav-item--color;
+	text-decoration: none;
+}
+
+.nav_icon__container {
+	display: inline-block;
+	padding-left: 1rem;
 }
