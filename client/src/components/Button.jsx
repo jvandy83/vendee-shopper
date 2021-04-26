@@ -2,9 +2,9 @@ import React from 'react';
 
 import '../styles/Button.scss';
 
-export default ({ type, value, control }) => {
+export default ({ value, control, action }) => {
 	return (
-		<button className={`btn-${control}`} type={type}>
+		<button className={`btn-${control}`} onClick={action}>
 			{value}
 		</button>
 	);

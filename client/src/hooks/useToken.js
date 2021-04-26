@@ -1,14 +1,8 @@
 let accessToken;
 
-export const useToken = () => {
-	const getAccessToken = () => {
-		return accessToken;
-	};
-	const setAccessToken = (s) => {
-		accessToken = s;
-	};
-	return {
-		getAccessToken,
-		setAccessToken,
-	};
+export const getAccessToken = () => {
+	return accessToken;
+};
+export const setAccessToken = (s) => {
+	accessToken = s;
 };

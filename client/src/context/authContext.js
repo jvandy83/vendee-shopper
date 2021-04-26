@@ -1,41 +1,68 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+
+import { useHistory } from 'react-router-dom';
+
+import { BASE_URL_AUTH } from './config';
+
 import axios from 'axios';
-
-import { BASE_URL } from './config';
-
-import { useToken } from '../hooks/useToken';
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-	const { setAccessToken, getAccessToken } = useToken();
+	const history = useHistory();
 
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
-	const [user, setUser] = useState({});
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [user, setUser] = useState(null);
+	const [accessToken, setAccessToken] = useState(null);
+
+	// optimize axios interceptor to
+	// not run so many times
+
+	axios.interceptors.response.use(
+		(res) => res,
+		(err) => {
+			if (err.response.status === 403 || err.response.status === 401) {
+				console.log('err.response', err.response);
+				axios({
+					url: `${BASE_URL_AUTH}/refresh-token`,
+					method: 'post',
+					withCredentials: true,
+				}).then((res) => {
+					if (res.status !== 200 && res.status !== 201) {
+						console.log('Unable to fetch user');
+						setError(res.data.message);
+					}
+					console.log('axios interceptor worked!!!!!');
+					setAccessToken(res.data.token);
+					setUser(res.data.user);
+				});
+			}
+			// return Promise.reject(err);
+		},
+	);
 
 	useEffect(() => {
-		setLoading(true);
+		console.log('inside useEffect authContext');
 		axios({
-			url: `${BASE_URL}/refresh-token`,
+			url: `${BASE_URL_AUTH}/refresh-token`,
 			method: 'post',
+			withCredentials: true,
 		}).then((res) => {
 			if (res.status !== 200 && res.status !== 201) {
 				console.log('Unable to fetch user');
-				setError(res.data.message);
 			}
-			console.log('found user', res.data.user);
-			setUser(res.data.user);
 			setAccessToken(res.data.token);
+			setUser(res.data.user);
 			setLoading(false);
 		});
-	}, [setUser, setError]);
+	}, []);
 
 	const register = async (values) => {
+		setLoading(true);
 		try {
 			const res = await axios({
-				url: `${BASE_URL}/register`,
+				url: `${BASE_URL_AUTH}/register`,
 				method: 'post',
 				data: values,
 			});
@@ -46,57 +73,76 @@ const AuthProvider = ({ children }) => {
 			console.error(err);
 			const { message } = res.data;
 			setError(message);
+			setLoading(false);
 		}
 	};
+
 	const login = async (values) => {
 		setLoading(true);
 		try {
 			const res = await axios({
-				url: `${BASE_URL}/login`,
+				url: `${BASE_URL_AUTH}/login`,
 				method: 'post',
 				data: values,
+				withCredentials: true,
 			});
 			if (res.status !== 200 && res.status !== 201) {
 				console.log('Login was unsuccessful');
 				const { message } = res.data;
 				setError(message);
 			}
-			const { token } = res.data;
 			setLoading(false);
-			setAccessToken(token);
-			setIsLoggedIn(true);
+			setAccessToken(res.data.token);
 		} catch (err) {
 			console.error(err);
 		}
 	};
-	// const getAuth = async () => {
-	// 	try {
-	// 		const res = await axios({
-	// 			url: `${BASE_URL}/me`,
-	// 			method: 'post',
-	// 			headers: {
-	// 				Authorization: `Bearer ${getAccessToken()}`,
-	// 			},
-	// 		});
-	// 		if (res.status !== 200 && res.status !== 201) {
-	// 			console.log('User is not authorized');
-	// 		}
-	// 	} catch (err) {
-	// 		console.error(err);
-	// 		const { message } = res.data;
-	// 		setError(message);
-	// 	}
-	// };
-	const fetchRefreshToken = async () => {
-		axios({
-			url: `${BASE_URL}/refresh-token`,
-			method: 'post',
-		});
+
+	const me = async () => {
+		try {
+			const res = await axios({
+				method: 'post',
+				url: `${BASE_URL_AUTH}/me`,
+				withCredentials: true,
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
+			});
+			if (res.status !== 200 && res.status !== 201) {
+				console.log('Could not fetch user');
+			}
+			console.log('res.data inside me function', res.data);
+		} catch (err) {
+			console.error(err);
+		}
 	};
+
+	const logout = async () => {
+		console.log('inside logout function');
+		const res = await axios({
+			method: 'post',
+			url: `http://localhost:5000/api/v1/auth/logout`,
+		});
+		setAccessToken(res.data.accessToken);
+		history.push('/');
+	};
+
+	if (!accessToken && loading) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<AuthContext.Provider
-			value={{ login, register, user, loading, error, isLoggedIn }}
+			value={{
+				login,
+				register,
+				accessToken,
+				loading,
+				error,
+				user,
+				logout,
+				me,
+			}}
 		>
 			{children}
 		</AuthContext.Provider>

@@ -16,17 +16,15 @@ export default ({
 	const className = [
 		'input_field',
 		errors && Object.keys(errors).some((e) => e === name) ? 'input_error' : '',
-	];
+	].join(' ');
 	return (
 		<div className='input_field__container'>
-			<label htmlFor={name}>{label}</label>
+			<label>{label}</label>
 			<input
-				autoComplete='nope'
 				type={type}
-				className={className}
 				name={name}
 				id={id}
-				value={value || ''}
+				value={value}
 				onChange={onChange}
 				placeholder={placeholder}
 			/>

@@ -8,6 +8,7 @@ import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 import authRoutes from './routes/auth.js';
+import profileRoutes from './routes//profile.js';
 
 import connectLivereload from 'connect-livereload';
 import livereload from 'livereload';
@@ -51,7 +52,8 @@ app.get('*', (_, res) => {
 	});
 });
 
-app.use('/v1/api/auth', authRoutes);
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/profile', profileRoutes);
 
 const MONGO_OPTIONS = {
 	useNewUrlParser: true,

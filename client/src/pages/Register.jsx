@@ -13,9 +13,10 @@ import { isEmpty } from '../util';
 
 import '../styles/Register';
 
-export default (props) => {
+export default () => {
 	const { register } = useAuth();
 	const checkErrors = (vals) => {
+		console.log('check errors');
 		const errors = {};
 		const { email, password } = vals;
 		if (email && email.length < 3) {
@@ -27,8 +28,10 @@ export default (props) => {
 		return errors;
 	};
 
+	const log = (obj) => console.log(obj);
+
 	const { handleChange, handleSubmit, errors, values } = useForm(
-		register,
+		log,
 		checkErrors,
 	);
 
@@ -96,7 +99,7 @@ export default (props) => {
 					errors={errors}
 				/>
 				<FormInput
-					type='confirmPassword'
+					type='password'
 					label='Confirm Password'
 					name='confirmPassword'
 					id='confirmPassword'
@@ -104,7 +107,7 @@ export default (props) => {
 					value={values.confirmPassword || ''}
 					errors={errors}
 				/>
-				<Button control='primary' type='submit' value='submit' />
+				<Button control='primary' value='submit' />
 			</Form>
 		</div>
 	);

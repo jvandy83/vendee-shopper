@@ -3,7 +3,7 @@ const { sign, verify } = jwt;
 
 export const createAccessToken = (user) => {
 	return sign({ user: user._id }, process.env.ACCESS_TOKEN_SECRET, {
-		expiresIn: '15m',
+		expiresIn: '5s',
 	});
 };
 
@@ -22,5 +22,5 @@ export const verifyToken = (token) => {
 };
 
 export const sendRefreshToken = (res, token) => {
-	res.cookie('qid', token, { httpOnly: true });
+	res.cookie('refresh_token', token, { httpOnly: true });
 };

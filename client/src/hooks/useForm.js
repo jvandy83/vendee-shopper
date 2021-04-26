@@ -10,7 +10,7 @@ const useForm = (callback, validate) => {
 	useEffect(() => {
 		if (Object.keys(errors).length === 0 && isSubmitting) {
 			callback(values);
-			clearInput();
+			// clearInput();
 		}
 		return setIsSubmitting(false);
 	}, [errors, callback, isSubmitting, values, clearInput]);

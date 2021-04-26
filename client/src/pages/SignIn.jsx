@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import { Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import FormInput from '../components/inputs/FormInput';
 
@@ -17,7 +17,8 @@ import { useAuth } from '../context/authContext';
 import '../styles/SignIn';
 
 export default () => {
-	const { login, isLoggedIn } = useAuth();
+	const history = useHistory();
+	const { login, accessToken } = useAuth();
 
 	const checkErrors = (vals) => {
 		const errors = {};
@@ -49,9 +50,11 @@ export default () => {
 		);
 	};
 
-	if (isLoggedIn) {
-		return <Redirect to='/profile' />;
-	}
+	useEffect(() => {
+		if (accessToken) {
+			history.push('/profile');
+		}
+	});
 
 	return (
 		<div className='signin_root'>

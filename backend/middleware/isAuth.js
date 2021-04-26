@@ -5,18 +5,24 @@ export const isAuth = async (req, res, next) => {
 	const authorization = req.headers['authorization'];
 
 	if (!authorization) {
-		throw new Error('Not authenticated');
+		return res.status(403).json({
+			message: 'Missing accessToken',
+		});
 	}
 
 	try {
-		const token = authorization.split(' ')[1];
+		const token = authorization.replace('Bearer ', '');
+
+		console.log('accessToken inside auth middleware', token);
 
 		const payload = verify(token, process.env.ACCESS_TOKEN_SECRET);
 
 		req.user = payload.user;
 	} catch (err) {
 		console.error(err);
-		throw new Error('Not authenticated');
+		return res.status(403).json({
+			message: 'Invalid accessToken',
+		});
 	}
 
 	return next();

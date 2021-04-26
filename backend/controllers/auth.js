@@ -7,21 +7,25 @@ import {
 	verifyToken,
 } from '../utils/auth.js';
 
-import { __prod__ } from '../constants.js';
-
 import argon2 from 'argon2';
 
 export const register = async (req, res, next) => {
-	const { email, password, fullName, tokenVersion } = req.body;
+	console.log(req.body);
+	const { email, password, firstName, lastName } = req.body;
 	try {
-		const doc = await User.findOne({ email: email });
+		const doc = await User.findOne({ email });
 		if (doc) {
-			return res.status(400).json({
+			return res.status(401).json({
 				message: 'Please use a different email',
 			});
 		}
 		const hash = await argon2.hash(password);
-		const user = new User({ email, password: hash, fullName, tokenVersion });
+		const user = new User({
+			email,
+			password: hash,
+			firstName,
+			lastName,
+		});
 		await user.save();
 
 		res.status(200).json({
@@ -35,27 +39,30 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
 	const { email, password } = req.body;
-	console.log(email, password);
 	try {
-		const user = await User.findOne({ email }).exec();
+		const user = await User.findOne({ email });
 		if (!user) {
-			return res.status(400).json({
+			return res.status(401).json({
 				message: 'Email or password is incorrect',
 			});
 		}
 
 		const decoded = await argon2.verify(user.password, password);
 		if (!decoded) {
-			return res.status(400).json({
+			return res.status(401).json({
 				message: 'Email or password is incorrect',
 			});
 		}
-		// createRefreshToken returns
-		// a cookie so it accepts response param
+		// sendRefreshToken returns
+		// a cookie with payload === { user: user._id }
+		// so it accepts response arg
+		// and user arg
 		sendRefreshToken(res, createRefreshToken(user));
 
 		return res.status(200).json({
-			// createAccessToken returns plain jsonwebtoken
+			// createAccessToken returns jsonwebtoken
+			// with payload === { user: user._id }
+			// so takes user arg
 			token: createAccessToken(user),
 			user,
 		});
@@ -65,8 +72,6 @@ export const login = async (req, res, next) => {
 };
 
 export const me = async (req, res, next) => {
-	console.log((req.user && req.user) || 'User is not set on req object');
-
 	const user = await User.findById(req.user);
 	if (!user) {
 		return res.status(401).json({
@@ -80,28 +85,27 @@ export const me = async (req, res, next) => {
 };
 
 export const fetchRefreshToken = async (req, res, next) => {
-	const token = req.cookies.qid;
+	const refreshToken = req.cookies['refresh_token'];
 
-	if (!token) {
-		return res.status(403).json({
-			ok: false,
+	if (!refreshToken) {
+		return res.status(401).json({
 			accessToken: '',
-			message: 'not authorized',
+			message: 'refreshToken not present in request',
 		});
 	}
 
 	let payload;
 
 	try {
-		// payload value === { user: user._id }
-		payload = verifyToken(token);
+		// payload = { user: user._id }
+		payload = verifyToken(refreshToken);
 	} catch (err) {
 		console.error(err);
 
 		res.json({
 			error: err,
 			accessToken: '',
-			message: 'not authorized',
+			message: 'refreshToken payload not valid',
 		});
 	}
 
@@ -111,24 +115,50 @@ export const fetchRefreshToken = async (req, res, next) => {
 		res.status(401).json({
 			message: 'User not found',
 			accessToken: '',
-			message: 'no user found',
 		});
 	}
+
+	/* 
+	- check tokenVersion in mongoDB
+		against current cookie token version
+
+	- if version has been incremented
+		we intentionally logged out
+		user due to account being hacked
+		or some other deliberate reason
+	*/
 
 	if (user.tokenVersion !== payload.tokenVersion) {
-		return res.status(403).json({
-			ok: false,
+		return res.status(401).json({
 			accessToken: '',
-			message: 'bad token',
+			message: 'token version is not valid',
 		});
 	}
 
+	// we have a valid token
+	// send back new REFRESH_TOKEN value
+
 	sendRefreshToken(res, createRefreshToken(user));
+
+	// send back a new ACCESS_TOKEN value
 
 	return res.status(200).json({
 		message: 'Success',
 		token: createAccessToken(user),
 		user,
+	});
+};
+
+export const logout = (req, res, next) => {
+	// sendRefreshToken(res, createRefreshToken(user));
+	console.log('inside logout controller');
+	res.cookie('refresh_token', '', {
+		httpOnly: true,
+		maxAge: new Date(0),
+	});
+	return res.status(200).json({
+		message: 'Logged out',
+		accessToken: '',
 	});
 };
 
@@ -147,7 +177,6 @@ export const revokeRefreshToken = async (req, res, next) => {
 			message: 'Server Error',
 		});
 	}
-	console.log(doc);
 	return res.status(200).json({
 		message: 'User has been logged out',
 	});

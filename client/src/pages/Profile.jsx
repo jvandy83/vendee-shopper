@@ -14,24 +14,25 @@ import data from '../components/inputs/selectData.js';
 
 import { isEmpty } from '../util.js';
 
-import { useAuth } from '../context/authContext';
-
 import { useGreeting } from '../hooks/useGreeting';
+
+import { useAuth } from '../context/authContext';
+import { useProfile } from '../context/profileContext';
 
 import '../styles/Profile.scss';
 import '../styles/Spinner.scss';
 
 export default () => {
-	const { user, loading } = useAuth();
+	const { user } = useAuth();
+	const { addProfile } = useProfile();
 	const greeting = useGreeting();
 
 	const checkErrors = (vals) => {
 		const errors = {};
 		return errors;
 	};
-	const log = (obj) => console.log(obj);
 	const { handleChange, handleSubmit, values, errors } = useForm(
-		log,
+		addProfile,
 		checkErrors,
 	);
 	const renderErrors = () => {
@@ -54,36 +55,30 @@ export default () => {
 		));
 	};
 
-	if (loading) {
-		return (
-			<div className='lds-default'>
-				<div></div>
-				<div></div>
-				<div></div>
-				<div></div>
-				<div></div>
-				<div></div>
-				<div></div>
-				<div></div>
-				<div></div>
-				<div></div>
-				<div></div>
-				<div></div>
-			</div>
-		);
-	}
-
-	let firstName = null;
-
-	if (!isEmpty(user)) {
-		firstName = user.fullName.split(' ')[0];
-	}
+	// if (loading) {
+	// 	return (
+	// 		<div className='lds-default'>
+	// 			<div></div>
+	// 			<div></div>
+	// 			<div></div>
+	// 			<div></div>
+	// 			<div></div>
+	// 			<div></div>
+	// 			<div></div>
+	// 			<div></div>
+	// 			<div></div>
+	// 			<div></div>
+	// 			<div></div>
+	// 			<div></div>
+	// 		</div>
+	// 	);
+	// }
 
 	return (
 		<div className='profile_root'>
 			<div className='profile_header'>
 				<h1 className='profile_header__greeting'>
-					{greeting}, {firstName}
+					{greeting}, {user && user.firstName}
 				</h1>
 				<p className='profile_header__description'>Let's build your profile </p>
 			</div>
@@ -145,9 +140,11 @@ export default () => {
 					name='dietaryRestrictions'
 					id='dietaryRestrictions'
 					defaultText='--Choose any dietary restrictions--'
+					onChange={handleChange}
 				>
 					{renderSelectOptions()}
 				</Select>
+
 				<Button type='submit' value='Save' control='primary' />
 			</Form>
 		</div>

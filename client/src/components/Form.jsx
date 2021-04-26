@@ -2,9 +2,9 @@ import React from 'react';
 
 import '../styles/Form.scss';
 
-export default ({ children }, ...props) => {
+export default ({ children, onSubmit }, ...props) => {
 	return (
-		<form autoComplete='password' className='form_root'>
+		<form onSubmit={onSubmit} className='form_root'>
 			{children}
 		</form>
 	);

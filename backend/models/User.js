@@ -10,35 +10,15 @@ const userSchema = new Schema({
 			/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
 			'Please add a valid email',
 		],
-		required: [true, 'Please add a name'],
+		required: [true, 'Please add an email'],
 	},
 	password: {
 		type: String,
 		required: true,
 		minlength: 6,
 	},
-	fullName: {
-		type: String,
-		required: [true, 'Please add your name'],
-	},
-	address: {
-		street: String,
-		city: String,
-		state: String,
-		zipcode: Number,
-	},
-	contact: {
-		phone: String,
-		hidden: Boolean,
-	},
-	restrictions: {
-		celiac: Boolean,
-		lactose: Boolean,
-		diabetic: Boolean,
-		kosher: Boolean,
-		peanut: Boolean,
-		vegan: Boolean,
-	},
+	firstName: String,
+	lastName: String,
 	tokenVersion: {
 		type: Number,
 		default: 0,

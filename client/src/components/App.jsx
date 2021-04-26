@@ -7,12 +7,16 @@ import Profile from '../pages/Profile.jsx';
 
 import { Route, Switch } from 'react-router-dom';
 
+import { useAuth } from '../context/authContext';
+
 import '../styles/App.scss';
 
-export default (props) => {
-	// if (loading) {
-	// 	return <div>Loading...</div>;
-	// }
+export default () => {
+	const { loading } = useAuth();
+
+	if (loading) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<div className='app_root'>

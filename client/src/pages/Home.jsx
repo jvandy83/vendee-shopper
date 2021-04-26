@@ -1,10 +1,8 @@
 import React from 'react';
-import SignIn from '../components/SignIn.jsx';
 
 export default () => {
 	return (
 		<div className='home_root'>
-			<SignIn />
 			<div className='header'>
 				<h1 className='header_title'>Vendee Shopper</h1>
 				<p className='header_description'>
