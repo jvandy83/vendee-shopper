@@ -19,21 +19,13 @@ export default () => {
 			</div>
 			<ul className='nav_list'>
 				<li className='nav_list__item'>
-					<Link className='nav_list__item-link' to='#'>
-						Contact
-					</Link>
-				</li>
-				<li className='nav_list__item'>
-					<button onClick={me} className='nav_list__item-link' to='#'>
-						About
-					</button>
-				</li>
-				<li className='nav_list__item'>
 					<Link className='nav_list__item-link' to='/profile'>
 						Profile
 					</Link>
 				</li>
-				<Button value='Sign out' control='unfilled' action={logout} />
+				<Button design='unfilled' onClick={logout}>
+					Sign out
+				</Button>
 			</ul>
 		</nav>
 	) : (
@@ -43,9 +35,14 @@ export default () => {
 					Vendee Shopper
 				</Link>
 			</div>
-			<Link to='/signin'>
-				<Button value='Sign in' control='unfilled' />
-			</Link>
+			<div>
+				<Link to='/signin'>
+					<Button design='unfilled'>Sign in</Button>
+				</Link>
+				<Link to='/register'>
+					<Button design='primary'>Register</Button>
+				</Link>
+			</div>
 		</nav>
 	);
 };

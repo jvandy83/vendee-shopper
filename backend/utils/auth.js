@@ -3,7 +3,7 @@ const { sign, verify } = jwt;
 
 export const createAccessToken = (user) => {
 	return sign({ user: user._id }, process.env.ACCESS_TOKEN_SECRET, {
-		expiresIn: '5s',
+		expiresIn: '15m',
 	});
 };
 

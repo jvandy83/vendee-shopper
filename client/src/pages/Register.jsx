@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import FormInput from '../components/inputs/FormInput';
 
 import Button from '../components/Button';
@@ -14,9 +15,8 @@ import { isEmpty } from '../util';
 import '../styles/Register';
 
 export default () => {
-	const { register } = useAuth();
+	const { register, loading, accessToken } = useAuth();
 	const checkErrors = (vals) => {
-		console.log('check errors');
 		const errors = {};
 		const { email, password } = vals;
 		if (email && email.length < 3) {
@@ -31,7 +31,7 @@ export default () => {
 	const log = (obj) => console.log(obj);
 
 	const { handleChange, handleSubmit, errors, values } = useForm(
-		log,
+		register,
 		checkErrors,
 	);
 
@@ -48,16 +48,16 @@ export default () => {
 		);
 	};
 
-	// if (props.isRegistered) {
-	// 	return <Redirect to='/profile' />;
-	// }
+	if (!loading && accessToken) {
+		return <Redirect to='/profile' />;
+	}
 
 	return (
 		<div className='register_root'>
 			<div className='register_title'>
 				<h2>Register</h2>
 			</div>
-			<Form onSubmit={handleSubmit}>
+			<Form>
 				{renderErrors()}
 				<label>Name</label>
 				<div className='name_input__container'>
@@ -107,7 +107,9 @@ export default () => {
 					value={values.confirmPassword || ''}
 					errors={errors}
 				/>
-				<Button control='primary' value='submit' />
+				<Button design='primary' onClick={handleSubmit}>
+					Submit
+				</Button>
 			</Form>
 		</div>
 	);

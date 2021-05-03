@@ -23,6 +23,10 @@ const userSchema = new Schema({
 		type: Number,
 		default: 0,
 	},
+	profile: {
+		type: Schema.Types.ObjectId,
+		ref: 'Profile',
+	},
 	resetPasswordToken: String,
 	resetPasswordDate: {
 		type: Date,

@@ -1,19 +1,19 @@
 $btn-primary: #4d8dc1;
 $btn-unfilled: #4dc166;
 $btn-unfilled--hover: #4f9e60;
-$btn-primary--hover: rgba(#4d8dc1, 0.88);
+$btn-primary--hover: rgba(#4d8dc1, 0.55);
 $btn-font--color: #fff;
 
-.btn-primary {
+.button--primary {
 	background: $btn-primary;
 	color: $btn-font--color;
 	transition: background-color 250ms ease-in-out;
 	outline: none;
 	border: 1px solid $btn-primary;
 	border-radius: 0.25rem;
-	width: 30%;
+	// width: 30%;
 	max-width: 7rem;
-	padding: 0.38rem 0;
+	// padding: 0.38rem 0;
 	font-weight: 700;
 	text-transform: capitalize;
 	margin: auto;
@@ -24,16 +24,15 @@ $btn-font--color: #fff;
 	}
 }
 
-.btn-unfilled {
+.button--unfilled {
 	background-color: inherit;
 	color: $btn-unfilled;
 	transition: background-color 25ms ease-in-out;
 	outline: none;
-	border: 2px solid $btn-unfilled;
-	border-radius: 0.25rem;
+	border: 1px solid $btn-unfilled;
 	// width: 30%;
 	max-width: 7rem;
-	padding: 0.38rem 0.38rem;
+	// padding: 0.38rem 0.38rem;
 	font-weight: 500;
 	margin: auto;
 	cursor: pointer;
@@ -43,3 +42,140 @@ $btn-font--color: #fff;
 		background-color: $btn-unfilled--hover;
 	}
 }
+
+// .button {
+// 	font: inherit;
+// 	cursor: pointer;
+// 	border-radius: 3px;
+// }
+
+// .button:focus {
+// 	outline: none;
+// }
+
+// .button:disabled {
+// 	background: #ccc;
+// 	color: #888888;
+// 	cursor: not-allowed;
+// 	border: #ccc;
+// 	box-shadow: none;
+// }
+
+// .button:disabled:hover,
+// .button:disabled:active {
+// 	background: #ccc;
+// 	color: #888888;
+// 	border: #ccc;
+// }
+
+// /* .button:hover,
+// .button:active {
+//   background: #4177a8;
+//   color: #fff;
+// } */
+
+// .button--flat {
+// 	font-family: 'Lato';
+// 	border: none;
+// 	padding: 0;
+// 	text-decoration: underline;
+// }
+
+// .button--flat:hover,
+// .button--flat:active {
+// 	color: #2a5781;
+// 	transition: all 250ms ease-in-out;
+// }
+
+// .button--raised {
+// 	background: #4177a8;
+// 	color: #fff;
+// 	padding: 0.2rem 1rem;
+// 	box-shadow: 0 1px 8px rgba(0, 0, 0, 0.26);
+// }
+
+// .button--raised:hover,
+// .button--raised:active {
+// 	background: #4177a8;
+// }
+
+// .button.button--accent {
+// 	border-color: #d8aa28;
+// 	color: #d8aa28;
+// }
+
+// .button--accent:hover,
+// .button--accent:active {
+// 	background: #d8aa28;
+// 	color: #4177a8;
+// }
+
+// .button--flat.button--accent:hover,
+// .button--flat.button--accent:active {
+// 	background: rgba(250, 184, 63, 0.3);
+// 	color: #d8aa28;
+// }
+
+// .button.button--accent.button--raised {
+// 	background: #d8aa28;
+// 	color: #4177a8;
+// }
+
+// .button--raised.button--accent:hover,
+// .button--raised.button--accent:active {
+// 	background: #fbc766;
+// }
+
+// .button.button--danger {
+// 	border-color: #a30000;
+// 	color: #a30000;
+// }
+
+// .button--danger:hover,
+// .button--danger:active {
+// 	background: #a30000;
+// 	color: #fff;
+// }
+
+// .button--flat.button--danger:hover,
+// .button--flat.button--danger:active {
+// 	background: rgba(163, 0, 0, 0.3);
+// 	color: #a30000;
+// }
+
+// .button.button--danger.button--raised {
+// 	background: #a30000;
+// 	color: #fff;
+// }
+
+// .button--raised.button--danger:hover,
+// .button--raised.button--danger:active {
+// 	background: #c00000;
+// }
+
+// .button.button--success {
+// 	border-color: #00b359;
+// 	color: #00b359;
+// }
+
+// .button--success:hover,
+// .button--success:active {
+// 	background: #00b359;
+// 	color: #fff;
+// }
+
+// .button--flat.button--success:hover,
+// .button--flat.button--success:active {
+// 	background: rgba(0, 179, 90, 0.3);
+// 	color: #00b359;
+// }
+
+// .button.button--success.button--raised {
+// 	background: #00b359;
+// 	color: #fff;
+// }
+
+// .button--raised.button--success:hover,
+// .button--raised.button--success:active {
+// 	background: #00a151;
+// }

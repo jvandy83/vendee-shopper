@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { useHistory } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import FormInput from '../components/inputs/FormInput';
 
@@ -17,8 +17,7 @@ import { useAuth } from '../context/authContext';
 import '../styles/SignIn';
 
 export default () => {
-	const history = useHistory();
-	const { login, accessToken } = useAuth();
+	const { login, accessToken, loading } = useAuth();
 
 	const checkErrors = (vals) => {
 		const errors = {};
@@ -50,11 +49,15 @@ export default () => {
 		);
 	};
 
-	useEffect(() => {
-		if (accessToken) {
-			history.push('/profile');
-		}
-	});
+	// useEffect(() => {
+	// 	if (accessToken) {
+	// 		history.push('/profile');
+	// 	}
+	// });
+
+	if (!loading && accessToken) {
+		return <Redirect to='/profile' />;
+	}
 
 	return (
 		<div className='signin_root'>
@@ -80,7 +83,9 @@ export default () => {
 					value={values.password || ''}
 				/>
 				<div className='button_container'>
-					<Button type='submit' value='submit' control='primary' />
+					<Button type='submit' design='primary'>
+						Submit
+					</Button>
 				</div>
 			</Form>
 		</div>

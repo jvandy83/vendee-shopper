@@ -46,14 +46,14 @@ if (process.env.NODE_ENV === 'development') {
 	app.use(connectLivereload());
 }
 
+app.use('/api/v1/profile', profileRoutes);
+app.use('/api/v1/auth', authRoutes);
+
 app.get('*', (_, res) => {
 	res.sendFile('index.html', {
 		root: path.join(__dirname, '../', 'client', 'dist'),
 	});
 });
-
-app.use('/api/v1/auth', authRoutes);
-app.use('/api/v1/profile', profileRoutes);
 
 const MONGO_OPTIONS = {
 	useNewUrlParser: true,

@@ -6,9 +6,15 @@ export default (props) => {
 	return (
 		<>
 			<label>{props.label}</label>
-			<select style={{ marginBottom: '1rem' }} name={props.name} id={props.id}>
+			<select
+				style={{ marginBottom: '1rem' }}
+				name={props.name}
+				id={props.id}
+				value={props.value}
+				onChange={props.onChange}
+			>
 				{/* define default option value and text */}
-				<option value={props.value}>{props.defaultText}</option>
+				<option>{props.defaultText}</option>
 				{props.children}
 			</select>
 		</>

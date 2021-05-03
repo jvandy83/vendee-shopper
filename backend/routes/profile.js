@@ -1,9 +1,12 @@
 import express from 'express';
 
+import { isAuth } from '../middleware/isAuth.js';
+
 const router = express.Router();
 
-import { addProfile } from '../controllers/profile.js';
+import { addProfile, getProfile } from '../controllers/profile.js';
 
-router.post('/add-profile', addProfile);
+router.put('/add-profile', isAuth, addProfile);
+router.get('/get-profile', isAuth, getProfile);
 
 export default router;

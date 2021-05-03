@@ -2,10 +2,11 @@ import React from 'react';
 
 import '../styles/Button.scss';
 
-export default ({ value, control, action }) => {
+export default ({ children, design, mode, onClick }) => {
+	const className = [`button button--${design}`, `button--${mode}`].join(' ');
 	return (
-		<button className={`btn-${control}`} onClick={action}>
-			{value}
+		<button className={className} onClick={onClick}>
+			{children}
 		</button>
 	);
 };

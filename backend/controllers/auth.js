@@ -1,4 +1,5 @@
 import User from '../models/User.js';
+import Profile from '../models/Profile.js';
 
 import {
 	createRefreshToken,
@@ -28,8 +29,13 @@ export const register = async (req, res, next) => {
 		});
 		await user.save();
 
-		res.status(200).json({
-			message: 'Successfully added a new user',
+		sendRefreshToken(res, createRefreshToken(user));
+
+		return res.status(200).json({
+			// createAccessToken returns jsonwebtoken
+			// with payload === { user: user._id }
+			// so takes user arg
+			token: createAccessToken(user),
 			user,
 		});
 	} catch (err) {

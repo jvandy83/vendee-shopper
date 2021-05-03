@@ -1,0 +1,29 @@
+.card {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 2rem;
+	margin: 4rem 2rem 0 2rem;
+	border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.card-content {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid rgba(0, 0, 0, 0.3);
+	padding: 2rem;
+	margin: 0 2rem;
+}
+
+.card-content__header {
+	margin-bottom: 0.5rem;
+}
+
+.card-content__field {
+	margin: 0;
+}
+
+#edit-icon {
+	width: 1.1rem;
+	cursor: pointer;
+}
